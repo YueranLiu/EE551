@@ -19,4 +19,6 @@ my project
 ###### Yueran Liu | website (https://github.com/YueranLiu/EE551)
 
 
+###### ps: the floder 01_pythoncard is a save business card code I made long time ago, I do not know why when I make another folder to save my python code, it copy this folder. if I delete this folder my code can not run.TAT
+
 

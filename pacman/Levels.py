@@ -57,6 +57,7 @@ class Player(pygame.sprite.Sprite):
 		elif direction[1] > 0:
 			self.image = pygame.transform.rotate(self.base_image, -90)
 		self.speed = [direction[0] * self.base_speed[0], direction[1] * self.base_speed[1]]
+		self.is_move = True
 		return self.speed
 
 	def update(self, wall_sprites, gate_sprites):
@@ -91,7 +92,7 @@ class Level1():
 						  [0, 0, 600, 6], #上
 						  [0, 600, 606, 6],#下
 						  [600, 0, 6, 606],#右
-						  [300, 0, 6, 66],#shangzhong
+						  [300, 0, 6, 66],#
 						  [60, 60, 106, 6],
 						  [440, 60, 106, 6],
 						  [60, 120, 66, 6],

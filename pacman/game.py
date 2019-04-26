@@ -15,13 +15,37 @@ PURPLE = (255, 0, 255)
 BGMPath = os.path.join(os.getcwd(), 'sounds/latale.mp3')
 ICON = pygame.image.load('images/icon.png')
 
-PlayerPath = os.path.join(os.getcwd(), 'images/pacman.png')
-Ghost1Path = os.path.join(os.getcwd(), 'images/Blinky.png')
-Ghost2Path = os.path.join(os.getcwd(), 'images/Clyde.png')
-Ghost3Path = os.path.join(os.getcwd(), 'images/Inky.png')
-Ghost4Path = os.path.join(os.getcwd(), 'images/Pinky.png')
+packmanPic = 'images/pacman.png'
+ghost1Pic = 'images/Blinky.png'
+ghost2Pic = 'images/Clyde.png'
+ghost3Pic = 'images/Inky.png'
+ghost4Pic = 'images/Pinky.png'
+PlayerPath = os.path.join(os.getcwd(), packmanPic)
+Ghost1Path = os.path.join(os.getcwd(), ghost1Pic)
+Ghost2Path = os.path.join(os.getcwd(), ghost2Pic)
+Ghost3Path = os.path.join(os.getcwd(), ghost3Pic)
+Ghost4Path = os.path.join(os.getcwd(), ghost4Pic)
+
+def key_is_down(event, player_sprites):
+    if event.key == pygame.K_LEFT:
+        changeSpeed([-1,0], player_sprites)
+    elif event.key == pygame.K_RIGHT:
+        changeSpeed([1,0],player_sprites)
+    elif event.key == pygame.K_UP:
+        changeSpeed([0, -1],player_sprites)
+    elif event.key == pygame.K_DOWN:
+        changeSpeed([0, 1],player_sprites)
 
 
+def changeSpeed(speed, player_sprites):
+    for hero in player_sprites:
+        hero.changeSpeed(speed)
+
+def key_is_up(event, player_sprites):
+    if (event.key == pygame.K_LEFT) or (event.key == pygame.K_RIGHT) or (event.key == pygame.K_UP) or (
+           event.key == pygame.K_DOWN):
+        for hero in player_sprites:
+            hero.is_move = False
 
 
 def startLevelGame(level, screen, font):
@@ -38,26 +62,13 @@ def startLevelGame(level, screen, font):
                 sys.exit(-1)
                 pygame.QUIT()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    for hero in player_sprites:
-                        hero.changeSpeed([-1, 0])
-                        hero.is_move = True
-                elif event.key == pygame.K_RIGHT:
-                    for hero in player_sprites:
-                        hero.changeSpeed([1, 0])
-                        hero.is_move = True
-                elif event.key == pygame.K_UP:
-                    for hero in player_sprites:
-                        hero.changeSpeed([0, -1])
-                        hero.is_move = True
-                elif event.key == pygame.K_DOWN:
-                    for hero in player_sprites:
-                        hero.changeSpeed([0, 1])
-                        hero.is_move = True
+                key_is_down(event, player_sprites)
+
             if event.type == pygame.KEYUP:
-                if (event.key == pygame.K_LEFT) or (event.key == pygame.K_RIGHT) or (event.key == pygame.K_UP) or (
-                        event.key == pygame.K_DOWN):
-                    hero.is_move = False
+                key_is_up(event, player_sprites)
+                #if (event.key == pygame.K_LEFT) or (event.key == pygame.K_RIGHT) or (event.key == pygame.K_UP) or (
+                #       event.key == pygame.K_DOWN):
+                #    hero.is_move = False
         screen.fill(BLACK)
         for hero in player_sprites:
             hero.update(wall_sprites, gate_sprites)
@@ -108,8 +119,6 @@ def startLevelGame(level, screen, font):
     return is_clearance
 
 
-
-
 def showText(screen, font, is_clearance, flag=False):
     clock = pygame.time.Clock()
     msg = 'Game Over!' if not is_clearance else 'Congratulations, you won!'
@@ -144,17 +153,12 @@ def showText(screen, font, is_clearance, flag=False):
         clock.tick(10)
 
 
-
-
-
 def initialize():
     pygame.init()
     pygame.display.set_icon(ICON)
     screen = pygame.display.set_mode([606, 606])
     pygame.display.set_caption('Pacman')
     return screen
-
-
 
 
 
@@ -166,16 +170,10 @@ def main(screen):
     fond_small = pygame.font.Font('font/myfont.ttf', 18)
     font_big = pygame.font.Font('font/myfont.ttf',30)
 
-    for num_level in range(1, Levels.NUMLEVELS + 1):
+    level = Levels.Level1()
+    is_clearance = startLevelGame(level, screen, fond_small)
 
-
-        if num_level == 1:
-            level = Levels.Level1()
-            is_clearance = startLevelGame(level, screen, fond_small)
-            if num_level == Levels.NUMLEVELS:
-                showText(screen, font_big, is_clearance, True)
-            else:
-                showText(screen, font_big, is_clearance)
+    showText(screen, font_big, is_clearance, True)
 
 
 if __name__ == '__main__':
